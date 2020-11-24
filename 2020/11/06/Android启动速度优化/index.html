@@ -6,17 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: 消息机制 | 黑白了落夜的博客</title>
+  <title>Android启动速度优化 | 黑白了落夜的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Android开发者和开源爱好者">
-<meta property="og:type" content="website">
-<meta property="og:title" content="黑白了落夜的博客">
-<meta property="og:url" content="http://yoursite.com/tags/%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6/index.html">
+  <meta name="description" content="启动流程123456781.点击桌面图标，Launcher进程采用Binder IPC向system_server进程发起startActivity请求2.system_server进程接收到请求后，向zygote进程发送创建进程的请求3.Zygote进程fork出新的子进程，即App进程4.App进程通过Binder IPC向system_server进程发起attachApplication请">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android启动速度优化">
+<meta property="og:url" content="http://yoursite.com/2020/11/06/Android%E5%90%AF%E5%8A%A8%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="黑白了落夜的博客">
-<meta property="og:description" content="Android开发者和开源爱好者">
+<meta property="og:description" content="启动流程123456781.点击桌面图标，Launcher进程采用Binder IPC向system_server进程发起startActivity请求2.system_server进程接收到请求后，向zygote进程发送创建进程的请求3.Zygote进程fork出新的子进程，即App进程4.App进程通过Binder IPC向system_server进程发起attachApplication请">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-11-06T09:51:50.000Z">
+<meta property="article:modified_time" content="2020-11-24T08:40:31.591Z">
 <meta property="article:author" content="黑白了落夜">
-<meta property="article:tag" content="Android,性能优化">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="启动优化">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="黑白了落夜的博客" type="application/atom+xml">
@@ -151,75 +154,242 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Android启动速度优化" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/12/Android%E4%B8%AD%E7%9A%84%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6Handler/" class="archive-article-date">
-  	<time datetime="2019-03-12T15:59:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-12</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/12/Android%E4%B8%AD%E7%9A%84%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6Handler/">Android中的消息机制Handler</a>
+    <h1 class="article-title" itemprop="name">
+      Android启动速度优化
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/11/06/Android%E5%90%AF%E5%8A%A8%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" class="archive-article-date">
+  	<time datetime="2020-11-06T09:51:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.点击桌面图标，Launcher进程采用Binder IPC向system_server进程发起startActivity请求</span><br><span class="line">2.system_server进程接收到请求后，向zygote进程发送创建进程的请求</span><br><span class="line">3.Zygote进程fork出新的子进程，即App进程</span><br><span class="line">4.App进程通过Binder IPC向system_server进程发起attachApplication请求</span><br><span class="line">5.system_server进程在收到请求后，进行一系列准备工作后，再通过binder IPC向App进程发送scheduleLaunchActivity请求</span><br><span class="line">6.App进程的binder线程在收到请求后，通过hander向主线程发送LAUNCH_ACTIVITY消息</span><br><span class="line">7.主线程收到消息后，通过反射机制创建目标Activity，并回调Activity的onCreate()方法</span><br><span class="line">8.App正式启动，开始Activity的生命周期</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h4 id="冷启动"><a href="#冷启动" class="headerlink" title="冷启动"></a>冷启动</h4><ul>
+<li>什么是冷启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">1.冷启动定义</span><br><span class="line">冷启动就是在启动应用前，系统中没有该应用的任何进程信息。</span><br><span class="line">(也就是第一次打开该应用、或者该应用进程被杀死再次打开的时候)</span><br><span class="line"></span><br><span class="line">2.冷启动、热启动的区别</span><br><span class="line">热启动：用户使用返回键退出应用(应用的进程被保留在后台)，然后马上又</span><br><span class="line">重新启动应用。</span><br><span class="line"></span><br><span class="line">冷启动的时候，系统会给该应用进程重新分配内存，创建初始化Applicatio</span><br><span class="line">n，再对MainActivity进行测量布局等一系列操作。</span><br><span class="line">热启动的时候，对MainActivity进行测量布局等一系列操作。</span><br><span class="line"></span><br><span class="line">热启动会较快的进入应用，冷启动会有一段白屏时间。</span><br><span class="line"></span><br><span class="line">3.冷启动时间的计算</span><br><span class="line">这个时间值从应用启动(创建进程)开始计算，到完成视图的第一次绘制(</span><br><span class="line">即activity内容对用户可见)为止。</span><br><span class="line"></span><br><span class="line">根据具体的业务不同，很难说一个App启动多久才算比较好，但是我们采用Google的标准</span><br><span class="line">认为控制在5s内就算比较好</span><br><span class="line"></span><br><span class="line">4.冷启动时间统计</span><br><span class="line">as里日志有个displayed</span><br><span class="line">或者 adb shell am start -S -W [包名]&#x2F;[activity名]</span><br><span class="line"></span><br><span class="line">上面adb命令启动的应用会显示三个值：</span><br><span class="line">ThisTime：最后一个Activity的启动耗时</span><br><span class="line">TotalTime：新应用启动的耗时【我们主要关注这个就可以了】</span><br><span class="line">WaitTime：包括前一个应用activity pause的时间和新应用启动的时间</span><br></pre></td></tr></table></figure>
+
+<h4 id="CPU-Profile的使用"><a href="#CPU-Profile的使用" class="headerlink" title="CPU Profile的使用"></a>CPU Profile的使用</h4><p>Traceview是android平台配备一个很好的性能分析的工具。它可以通过图形化的方式让我们了解我们要跟踪的程序的性能，并且能具体到每个方法的执行时间。但是目前Traceview 已弃用。如果使用 Android Studio3.2 或更高版本，则应改为使用 CPU Profiler</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Call Chart</td>
+<td>根据时间线查看调用栈，便于观察每次调用是何时发生的</td>
+</tr>
+<tr>
+<td>Flame Chart</td>
+<td>根据耗时百分比查看调用栈，便于发现总耗时很长的调用链</td>
+</tr>
+<tr>
+<td>Top Down Tree</td>
+<td>查看记录数据中所有方法调用栈，便于观察其中每一步所消耗的精确时间</td>
+</tr>
+<tr>
+<td>Bottom Up Tree</td>
+<td>便于观察耗时方法如何被调用的</td>
+</tr>
+</tbody></table>
+<p>CPU Profiler需要使用在8.0及以上版本，那么其他版本的呢？我们可以借助Debug API生成trace文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class MyApplication extends Application&#123;</span><br><span class="line">    publicMyApplication() &#123;</span><br><span class="line">        Debug.startMethodTracing(&quot;enjoy&quot;);    </span><br><span class="line">        </span><br><span class="line">    &#125;&#x2F;&#x2F;.....</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class MainActivity extends AppCompatActivity&#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onWindowFocusChanged(booleanhasFocus)&#123;</span><br><span class="line">        super.onWindowFocusChanged(hasFocus);</span><br><span class="line">        Debug.stopMethodTracing();    </span><br><span class="line">        </span><br><span class="line">    &#125;&#x2F;&#x2F;.......</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>运行App，则会在sdcard中生成一个enjoy.trace文件（需要sdcard读写权限）。将手机中的trace文件保存至电脑，随后拖入Android Studio即可。</p>
+<h4 id="冷启动的优化"><a href="#冷启动的优化" class="headerlink" title="冷启动的优化"></a>冷启动的优化</h4><p>根据上面冷启动的概念，我们可以知道，其实优化冷启动的工作主要得在Application和MainActivity里面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1.减少onCreate()方法的工作量</span><br><span class="line">我们重写Application的onCreate()方法，一般在里面初始化很多第三方的</span><br><span class="line">框架，这就比较耗时。可以懒加载，等真正使用的时候再初始化，但就比较</span><br><span class="line">麻烦。所以两者权衡一下。</span><br><span class="line"></span><br><span class="line">2.不要让Application参与业务操作。</span><br><span class="line">3.不在Application做耗时操作。比如加载大量文件、读流。</span><br><span class="line">4.不要以静态变量的方式在Application中保存数据。</span><br><span class="line">5.setContentView(R.layout.xxx)很耗时，所以要优化xml布局文件。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="StrictMode"><a href="#StrictMode" class="headerlink" title="StrictMode"></a>StrictMode</h4><p>StrictMode常用于捕捉应用程序主线程上的意外磁盘或网络访问。帮助我们让磁盘和网络操作远离主线程，可以使应用程序更加平滑、响应更快。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;开发测试过程中开启，正式上线需要关闭</span><br><span class="line"></span><br><span class="line">StrictMode.setThreadPolicy(&#x2F;&#x2F;线程检查策略</span><br><span class="line">       new StrictMode.ThreadPolicy.Builder()</span><br><span class="line">            .detectDiskReads()  &#x2F;&#x2F;检查读写操作</span><br><span class="line">            .detectDiskWrites()</span><br><span class="line">            .detectNetwork()</span><br><span class="line">            .penaltyDeath()</span><br><span class="line">            .penaltyLog()</span><br><span class="line">            .build()</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    StrictMode.setVmPolicy(&#x2F;&#x2F;VM检查策略</span><br><span class="line">       new StrictMode.VmPolicy.Builder()</span><br><span class="line">           .detectLeakedClosableObjects()  &#x2F;&#x2F;未关闭closable</span><br><span class="line">           .detectLeakedSqlLiteObjects() &#x2F;&#x2F;sqlite泄露</span><br><span class="line">           .penaltyLog() &#x2F;&#x2F;违规打印日志</span><br><span class="line">           .penaltyDeath() &#x2F;&#x2F;违规的崩溃</span><br><span class="line">           .build()</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+<h4 id="启动黑白屏问题"><a href="#启动黑白屏问题" class="headerlink" title="启动黑白屏问题"></a>启动黑白屏问题</h4><p>不管怎样，app的启动总会需要时间，而这段时间又不能什么也没有反应，所以goole在这段时间会显示一个黑(白)屏，具体是黑屏还是白屏根据我们的主题AppTheme而定，那么解决这个黑白屏问题(让用户体验更好)呢？可以在这段时间展示我们的一张图片。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1.自定义主题</span><br><span class="line">&lt;style name&#x3D;&quot;AppTheme.Launcher&quot;&gt;</span><br><span class="line">    &lt;item name&#x3D;&quot;android:windowBackground&quot;&gt;@drawable&#x2F;liyifeng1&lt;&#x2F;item&gt;</span><br><span class="line">    &lt;item name&#x3D;&quot;android:windowFullscreen&quot;&gt;true&lt;&#x2F;item&gt;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">2.在第一个activity使用</span><br><span class="line">&lt;activity android:name&#x3D;&quot;cn.gxh.base.SplashActivity&quot;</span><br><span class="line">        android:theme&#x3D;&quot;@style&#x2F;AppTheme.Launcher&quot;&gt;</span><br><span class="line">        &lt;intent-filter&gt;</span><br><span class="line">            &lt;action android:name&#x3D;&quot;android.intent.action.MAIN&quot; &#x2F;&gt;</span><br><span class="line">            &lt;category android:name&#x3D;&quot;android.intent.category.LAUNCHER&quot; &#x2F;&gt;</span><br><span class="line">        &lt;&#x2F;intent-filter&gt;</span><br><span class="line">    &lt;&#x2F;activity&gt;</span><br><span class="line">3.在第一个activity的onCreate()方法里再设置回原来的主题</span><br><span class="line">setTheme(R.style.AppTheme)</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你给的糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/zfb.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/wx.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">消息机制</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Handler</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">启动优化</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
+        			<a href="/categories/性能优化//" class="article-tag-list-link color5">性能优化</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/11/06/Android%E5%90%AF%E5%8A%A8%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/11/24/2020.11.17----%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          深入理解对象与垃圾回收机制
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2020/10/29/HashMap/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">HashMap</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -242,9 +412,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
