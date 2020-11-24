@@ -15,14 +15,14 @@
 <meta property="og:site_name" content="黑白了落夜的博客">
 <meta property="og:description" content="基本概念1234&#x2F;&#x2F;默认容量 16static final int DEFAULT_INITIAL_CAPACITY &#x3D; 1 &lt;&lt; 4;&#x2F;&#x2F;左移4位&#x2F;&#x2F;加载因子 0.75fstatic final float DEFAULT_LOAD_FACTOR &#x3D; 0.75f;  加载因子0.75的意思是这个表超过75">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://m.qpic.cn/psc?/V10lkhEJ28syni/45NBuzDIW489QBoVep5mcdd2qgFSWkREU2c1dZzzf5kKDaar.p3ktCJ6IzY1v8kS6*508Fzz.RQ2JCpw6aJukflgBbXt8oEhD53akPXKLrQ!/b&bo=jgQ3AgAAAAADF40!&rf=viewer_4&t=5">
+<meta property="og:image" content="https://thumbsnap.com/i/SESw5mUf.png">
 <meta property="article:published_time" content="2020-10-29T07:52:35.000Z">
-<meta property="article:modified_time" content="2020-11-24T08:40:18.388Z">
+<meta property="article:modified_time" content="2020-11-24T08:45:44.279Z">
 <meta property="article:author" content="黑白了落夜">
 <meta property="article:tag" content="Android">
 <meta property="article:tag" content="启动优化，HashMap">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://m.qpic.cn/psc?/V10lkhEJ28syni/45NBuzDIW489QBoVep5mcdd2qgFSWkREU2c1dZzzf5kKDaar.p3ktCJ6IzY1v8kS6*508Fzz.RQ2JCpw6aJukflgBbXt8oEhD53akPXKLrQ!/b&bo=jgQ3AgAAAAADF40!&rf=viewer_4&t=5">
+<meta name="twitter:image" content="https://thumbsnap.com/i/SESw5mUf.png">
   
     <link rel="alternative" href="/atom.xml" title="黑白了落夜的博客" type="application/atom+xml">
   
@@ -179,7 +179,7 @@
         <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;默认容量 16</span><br><span class="line">static final int DEFAULT_INITIAL_CAPACITY &#x3D; 1 &lt;&lt; 4;&#x2F;&#x2F;左移4位</span><br><span class="line">&#x2F;&#x2F;加载因子 0.75f</span><br><span class="line">static final float DEFAULT_LOAD_FACTOR &#x3D; 0.75f;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>加载因子0.75的意思是这个表超过75%容量的时候，就会扩容。0.75是一个经过大量实验测算得出的比较好的值，不要问为什么不是0.6或者0.8什么的……</li>
-<li>  HashMap的底层jdk1.8后是“数组+链表+红黑树”，之前是“数组+链表。说白了就是默认长度为16的数组，每个元素存储的是一个链表或者是红黑树的头结点。<br><img src="http://m.qpic.cn/psc?/V10lkhEJ28syni/45NBuzDIW489QBoVep5mcdd2qgFSWkREU2c1dZzzf5kKDaar.p3ktCJ6IzY1v8kS6*508Fzz.RQ2JCpw6aJukflgBbXt8oEhD53akPXKLrQ!/b&bo=jgQ3AgAAAAADF40!&rf=viewer_4&t=5" alt="image"></li>
+<li>  HashMap的底层jdk1.8后是“数组+链表+红黑树”，之前是“数组+链表。说白了就是默认长度为16的数组，每个元素存储的是一个链表或者是红黑树的头结点。<br><img src="https://thumbsnap.com/i/SESw5mUf.png" alt="image"></li>
 <li>哈希碰撞指的是key不同，但是计算的hash值相同或者在数组中的索引值相同了。HashMap来解决这个问题就是用了链表。当碰撞很多时，HashMap就退化成了一个链表，查询时间0(n)。在jdk1.8开始呢增加了红黑树（查询时间O（logn））这种数据结构，在碰撞结点较少时，就采用链表，当碰撞结点较多时，就转为红黑树。</li>
 <li>  HashMap是线程不安全的。HashTable是线程安全的，因为添加了synchronized关键字来确保线程同步。<a id="more"></a>
 
