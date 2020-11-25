@@ -15,16 +15,16 @@
 <meta property="og:site_name" content="黑白了落夜的博客">
 <meta property="og:description" content="什么是热修复一般的bug修复都是等下一个版本解决，然后发布新的apk。热修复可以直接在客户已经安装的程序当中修复bug。bug一般出现在某个类某个方法，如果我们能够动态的将客户端apk里某个类替换成我们已经修改好的类。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V10lkhEJ28syni/B09750z5tYEHNbapf*aZ074pVhmsqqJYN9yvL4ZhYmc!/b/dPIAAAAAAAAA&bo=eAEcAQAAAAADF1Y!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V10lkhEJ28syni/zbnkemxQ1YVl3cJbhtUGRgWcbVzTJbsPKGd13tlVEWU!/b/dDEBAAAAAAAA&bo=pANuAAAAAAADF*s!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V10lkhEJ28syni/Lpzcbs37ZoC5ABNPNvu7Phl52sdPNu1KTqt2RFzFviw!/b/dGEBAAAAAAAA&bo=BgG5AAAAAAADF4w!&rf=viewer_4">
+<meta property="og:image" content="https://thumbsnap.com/i/gnWExhfr.png">
+<meta property="og:image" content="https://thumbsnap.com/i/njpxHGGr.png">
+<meta property="og:image" content="https://thumbsnap.com/i/2GCLToum.png">
 <meta property="article:published_time" content="2018-05-18T01:31:00.000Z">
-<meta property="article:modified_time" content="2020-11-25T05:41:06.428Z">
+<meta property="article:modified_time" content="2020-11-25T05:48:24.455Z">
 <meta property="article:author" content="黑白了落夜">
 <meta property="article:tag" content="热修复">
 <meta property="article:tag" content="AndFix">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://m.qpic.cn/psb?/V10lkhEJ28syni/B09750z5tYEHNbapf*aZ074pVhmsqqJYN9yvL4ZhYmc!/b/dPIAAAAAAAAA&bo=eAEcAQAAAAADF1Y!&rf=viewer_4">
+<meta name="twitter:image" content="https://thumbsnap.com/i/gnWExhfr.png">
   
     <link rel="alternative" href="/atom.xml" title="黑白了落夜的博客" type="application/atom+xml">
   
@@ -195,7 +195,7 @@
 <li>阿里的AndFix、dexposed</li>
 <li>美团的Robust、ele的migo、百度的hotfix</li>
 </ul>
-<p><img src="http://m.qpic.cn/psb?/V10lkhEJ28syni/B09750z5tYEHNbapf*aZ074pVhmsqqJYN9yvL4ZhYmc!/b/dPIAAAAAAAAA&bo=eAEcAQAAAAADF1Y!&rf=viewer_4" alt="image"></p>
+<p><img src="https://thumbsnap.com/i/gnWExhfr.png" alt="image"></p>
 <h5 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h5><ul>
 <li>我们的需求是什么，需求是恒量一切的标准</li>
 <li>能满足需求的条件下，那个学习成本最低</li>
@@ -221,7 +221,7 @@
 <li>patch生成</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;命令说明</span><br><span class="line">usage: apkpatch -f &lt;new&gt; -t &lt;old&gt; -o &lt;output&gt; -k &lt;keystore&gt; -p &lt;***&gt; -a &lt;alias&gt; -e &lt;***&gt;</span><br><span class="line"> -a,--alias &lt;alias&gt;     keystore entry alias.</span><br><span class="line"> -e,--epassword &lt;***&gt;   keystore entry password.</span><br><span class="line"> -f,--from &lt;loc&gt;        new Apk file path.</span><br><span class="line"> -k,--keystore &lt;loc&gt;    keystore path.</span><br><span class="line"> -n,--name &lt;name&gt;       patch name.</span><br><span class="line"> -o,--out &lt;dir&gt;         output dir.</span><br><span class="line"> -p,--kpassword &lt;***&gt;   keystore password.</span><br><span class="line"> -t,--to &lt;loc&gt;          old Apk file path.</span><br></pre></td></tr></table></figure>
-<p>AndFix提供了生成补丁文件的工具，可在官网下载。这里我将修改前后两个apk以及签名文件都放在了同目录下，执行命令后生成的apatch文件在output文件夹下：<br><img src="http://m.qpic.cn/psb?/V10lkhEJ28syni/zbnkemxQ1YVl3cJbhtUGRgWcbVzTJbsPKGd13tlVEWU!/b/dDEBAAAAAAAA&bo=pANuAAAAAAADF*s!&rf=viewer_4" alt="image"><br><img src="http://m.qpic.cn/psb?/V10lkhEJ28syni/Lpzcbs37ZoC5ABNPNvu7Phl52sdPNu1KTqt2RFzFviw!/b/dGEBAAAAAAAA&bo=BgG5AAAAAAADF4w!&rf=viewer_4" alt="image"></p>
+<p>AndFix提供了生成补丁文件的工具，可在官网下载。这里我将修改前后两个apk以及签名文件都放在了同目录下，执行命令后生成的apatch文件在output文件夹下：<br><img src="https://thumbsnap.com/i/njpxHGGr.png" alt="命令"><br><img src="https://thumbsnap.com/i/2GCLToum.png" alt="目录"></p>
 <ul>
 <li>将apatch文件通过adb push到手机，由于机型不同以及本来路径就不同（这里我们在代码写死了）所以下面这个文件路径因人而异。</li>
 </ul>
