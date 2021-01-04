@@ -6,17 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Category: Java | 黑白了落夜的博客</title>
+  <title>Okhttp的线程池 | 黑白了落夜的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Android开发者和开源爱好者">
-<meta property="og:type" content="website">
-<meta property="og:title" content="黑白了落夜的博客">
-<meta property="og:url" content="http://yoursite.com/categories/Java/index.html">
+  <meta name="description" content="2021年第一篇文章~~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Okhttp的线程池">
+<meta property="og:url" content="http://yoursite.com/2021/01/04/Okhttp%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/index.html">
 <meta property="og:site_name" content="黑白了落夜的博客">
-<meta property="og:description" content="Android开发者和开源爱好者">
+<meta property="og:description" content="2021年第一篇文章~~">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-04T09:41:07.000Z">
+<meta property="article:modified_time" content="2021-01-04T09:43:34.184Z">
 <meta property="article:author" content="黑白了落夜">
-<meta property="article:tag" content="Android,性能优化">
+<meta property="article:tag" content="Okhttp">
+<meta property="article:tag" content="线程池">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="黑白了落夜的博客" type="application/atom+xml">
@@ -159,75 +162,251 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Okhttp的线程池" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/11/24/2020.11.17----%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" class="archive-article-date">
-  	<time datetime="2020-11-24T06:11:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-24</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/11/24/2020.11.17----%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/">深入理解对象与垃圾回收机制</a>
+    <h1 class="article-title" itemprop="name">
+      Okhttp的线程池
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2021/01/04/Okhttp%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="archive-article-date">
+  	<time datetime="2021-01-04T09:41:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>2021年第一篇文章~~</p>
+<a id="more"></a>
+
+<h4 id="线程池策略"><a href="#线程池策略" class="headerlink" title="线程池策略"></a>线程池策略</h4><p>当一个任务通过execute(Runnable)方法添加到线程池时：</p>
+<ol>
+<li>线程数量小于corePoolSize，新建线程数来处理被添加的任务。</li>
+<li>线程数量大于等于corePoolSize，存在空闲线程，使用空闲线程执行新任务。</li>
+<li>线程数量大于等于corePoolSize，不存在空闲线程，新任务被添加到等待队列，添加成功则等待空闲线程；</li>
+<li>添加失败：线程数量小于最大线程数，新建线程执行新任务；线程数量等于最大线程数，则拒绝此任务。</li>
+</ol>
+<h4 id="Okhttp线程池配置"><a href="#Okhttp线程池配置" class="headerlink" title="Okhttp线程池配置"></a>Okhttp线程池配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public synchronized ExecutorService executorService() &#123;</span><br><span class="line">    if (executorService &#x3D;&#x3D; null) &#123;</span><br><span class="line">      executorService &#x3D; new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60, TimeUnit.SECONDS,</span><br><span class="line">          new SynchronousQueue&lt;Runnable&gt;(), Util.threadFactory(&quot;OkHttp Dispatcher&quot;, false));</span><br><span class="line">    &#125;</span><br><span class="line">    return executorService;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，创建的线程池核心线程数为0，最大线程数MAX_VALUE，闲置时间60s，队列SynchronousQueue。这样的参数配置出来的线程池高并发，最大吞吐量。</p>
+<p>那么为什么Okhttp的线程池队列用的SynchronousQueue而不是其他的？我们先看个栗子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public void testQueue()&#123;</span><br><span class="line">    &#x2F;&#x2F;SynchronousQueue&lt;Runnable&gt; queue&#x3D;new SynchronousQueue&lt;&gt;();</span><br><span class="line">    &#x2F;&#x2F;LinkedBlockingDeque&lt;Runnable&gt; queue&#x3D;new LinkedBlockingDeque&lt;&gt;();</span><br><span class="line">    ArrayBlockingQueue&lt;Runnable&gt; queue&#x3D;new ArrayBlockingQueue&lt;Runnable&gt;(1);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    ThreadPoolExecutor poolExecutor &#x3D; new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60, TimeUnit.SECONDS,</span><br><span class="line">            queue);</span><br><span class="line"></span><br><span class="line">    poolExecutor.execute(new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            System.out.print(&quot;任务1&quot;);</span><br><span class="line">            while (true)&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    poolExecutor.execute(new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            System.out.print(&quot;任务2&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    while (true)&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里用的ArrayBlockingQueue，传的capacity为1。如果任务1是个耗时的操作，那么任务2得不到执行。我们可以看一下ThreadPoolExecutor的源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public void execute(Runnable command) &#123;</span><br><span class="line">    if (command &#x3D;&#x3D; null)</span><br><span class="line">        throw new NullPointerException();</span><br><span class="line">    </span><br><span class="line">    int c &#x3D; ctl.get();</span><br><span class="line">    &#x2F;&#x2F;corePoolSize为0，这里不用看了，进不来</span><br><span class="line">    if (workerCountOf(c) &lt; corePoolSize) &#123;</span><br><span class="line">        if (addWorker(command, true))</span><br><span class="line">            return;</span><br><span class="line">        c &#x3D; ctl.get();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;当任务1来了，添加到队列</span><br><span class="line">    &#x2F;&#x2F;当任务2来了，任务1已经从队列出来了，所以可以添加到队列</span><br><span class="line">    if (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</span><br><span class="line">        int recheck &#x3D; ctl.get();</span><br><span class="line">        if (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">            reject(command);</span><br><span class="line">            </span><br><span class="line">        &#x2F;&#x2F;如果当前线程池线程空，则添加一个线程，所以任务1执行</span><br><span class="line">        &#x2F;&#x2F;但是任务2来了，不满足这个判断条件，所以任务2得不到执行</span><br><span class="line">        else if (workerCountOf(recheck) &#x3D;&#x3D; 0)</span><br><span class="line">            addWorker(null, false);</span><br><span class="line">    &#125;</span><br><span class="line">    else if (!addWorker(command, false))</span><br><span class="line">        reject(command);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么我再加一个任务3呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">public void testQueue()&#123;</span><br><span class="line">    &#x2F;&#x2F;SynchronousQueue&lt;Runnable&gt; queue&#x3D;new SynchronousQueue&lt;&gt;();</span><br><span class="line">    &#x2F;&#x2F;LinkedBlockingDeque&lt;Runnable&gt; queue&#x3D;new LinkedBlockingDeque&lt;&gt;();</span><br><span class="line">    ArrayBlockingQueue&lt;Runnable&gt; queue&#x3D;new ArrayBlockingQueue&lt;Runnable&gt;(1);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    ThreadPoolExecutor poolExecutor &#x3D; new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60, TimeUnit.SECONDS,</span><br><span class="line">            queue);</span><br><span class="line"></span><br><span class="line">    poolExecutor.execute(new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            System.out.print(&quot;任务1&quot;);</span><br><span class="line">            while (true)&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    try &#123;</span><br><span class="line">        Thread.sleep(100);</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    poolExecutor.execute(new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            System.out.print(&quot;任务2&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    poolExecutor.execute(new Runnable() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            System.out.print(&quot;任务3&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    while (true)&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这次可以执行了，不过得到的执行顺序为：任务1、任务3、任务2。为什么呢？因为当任务3进来了后添加不到队列了，而此时线程数量小于最大线程数，所以新建线程执行了任务3，当任务3执行完后会从队列里取任务2执行。</p>
+<p>所以用ArrayBlockingQueue存在问题，哪怕把capacity改为别的数(除了0)，也存在这样的问题。</p>
+<p>那么LinkedBlockingDeque呢？LinkedBlockingDeque内部用的是链表结构，ArrayBlockingQueue用的是数组。LinkedBlockingDeque可以传capacity，也可以不传，不传的话有默认的为Integer.MAX_VALUE。它的效果其实是跟ArrayBlockingQueue一样的，也是有上述的问题。</p>
+<p>而SynchronousQueue是一个没有容量的队列，往里面添加永远失败，会开一个线程去执行。(当然了是在线程数量小于最大线程数的情况下，不过这个应该可以保证啦)不会因为谁把谁堵住而得不到执行。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你给的糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/zfb.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/wx.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">垃圾回收</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Okhttp</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">对象</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">线程池</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/Java//" class="article-tag-list-link color5">Java</a>
+        			<a href="/categories/开源框架//" class="article-tag-list-link color5">开源框架</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/01/04/Okhttp%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2020/12/25/%E6%8F%92%E4%BB%B6%E5%8C%96%E7%AC%94%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">插件化笔记</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%AD%96%E7%95%A5"><span class="toc-number">1.</span> <span class="toc-text">线程池策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Okhttp%E7%BA%BF%E7%A8%8B%E6%B1%A0%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">Okhttp线程池配置</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
+
+ 
+  <div id="gitalk-container" style="padding: 0px 30px 0px 30px;"></div> 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+
+if(true){
+	var gitalk = new Gitalk({
+  	clientID: '029f3817b09b5fc86076',
+  	clientSecret: 'ce828146a11d07fde0a0723f578e94c64cba8c60',
+  	repo: 'mycomments',
+  	owner: 'gxh-apologize',
+  	admin: ['gxh-apologize'],
+  	id: 'Mon Jan 04 2021 17:41:07 GMT+0800',
+  	distractionFreeMode: 'true'
+})
+gitalk.render('gitalk-container') 
+}
+</script>
+  
+
+
+ 
 
 
           </div>
@@ -257,10 +436,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
