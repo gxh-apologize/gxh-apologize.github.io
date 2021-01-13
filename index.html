@@ -234,6 +234,102 @@
 
 
   
+    <article id="post-Okhttp源码分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/13/Okhttp%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">Okhttp源码分析</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/13/Okhttp%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="archive-article-date">
+  	<time datetime="2021-01-13T07:28:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="OkHttp的简介与使用"><a href="#OkHttp的简介与使用" class="headerlink" title="OkHttp的简介与使用"></a>OkHttp的简介与使用</h3><ul>
+<li>简介：OkHttp是square公司开源出来的一个优秀的网络请求框架。Android4.4开始HttpUrlConnection的底层实现采用的就是okhttp。</li>
+</ul>
+        
+          <a class="article-more-a" href="/2021/01/13/Okhttp%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">网络</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Okhttp</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/开源框架//" class="article-tag-list-link color5">开源框架</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/13/Okhttp%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+ 
+
+
+  
     <article id="post-Okhttp的线程池" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -968,101 +1064,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/05/24/Camera%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
- 
-
-
-  
-    <article id="post-增量更新" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/14/%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0/">增量更新</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/14/%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0/" class="archive-article-date">
-  	<time datetime="2019-05-14T02:28:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>增量更新的主要目的是省流量。关于在哪个页面更新、到底提示不提示更新、是否强制更新等等这都不是增量更新的重点，这些根据具体需求就好了。增量更新主要就是用更少的流量去更新。</p>
-<p>增量更新主要涉及两个操作：差分、合并。合并指的是当前版本与所对应的差分包进行合并，这个操作在客户端完成。差分指的是新版本与之前旧版本所产生差分包，这个操作在服务端完成。后台应该有上传apk的功能，比如上传3.0版本的apk，那么上传完就应该生成各种差分包，比如与2.0版本apk的差分包、与1.0版本apk的差分包。</p>
-        
-          <a class="article-more-a" href="/2019/05/14/%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ndk</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">增量更新</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/14/%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0/">展开全文 >></a>
         </p>
       
 
