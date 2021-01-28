@@ -234,6 +234,102 @@
 
 
   
+    <article id="post-synchronized" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/28/synchronized/">synchronized</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/28/synchronized/" class="archive-article-date">
+  	<time datetime="2021-01-28T07:38:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p>同步方法支持一种简单的策略来防止线程干扰和内存一致性错误：如果一个对象对多个线程可见，则对该对象变量的所有读取或写入都是通过同步方法完成的。</p>
+<p>通俗来说，能够保证同一时刻最多只有一个线程执行该段代码，以达到保证并发安全的效果。</p>
+<p>synchronized是Java的关键字，被Java原生支持，是最基本的互斥同步手段。</p>
+        
+          <a class="article-more-a" href="/2021/01/28/synchronized/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">synchronized</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">锁</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Android基础//" class="article-tag-list-link color5">Android基础</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/28/synchronized/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+ 
+
+
+  
     <article id="post-Okhttp源码分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1000,102 +1096,6 @@
 
 
   
-    <article id="post-Camera的一些总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/24/Camera%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">Camera的一些总结</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/24/Camera%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/" class="archive-article-date">
-  	<time datetime="2019-05-24T05:10:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="闲谈"><a href="#闲谈" class="headerlink" title="闲谈"></a>闲谈</h3><p>因为最近公司在做有关摄像头的项目(人脸识别、皮肤测试)。涉及到了usb摄像头和原生的摄像头，我们usb摄像头用的UVC的库来预览的，其实用Camera来预览也是可以的。开发期间查阅了一些资料，也走了很多弯路。所以现在项目上线了，写了这篇文章，希望能够帮到在Camera迷茫的小伙伴们……</p>
-<h3 id="Camera和Camera2"><a href="#Camera和Camera2" class="headerlink" title="Camera和Camera2"></a>Camera和Camera2</h3><p>Android5.0以前，相机框架是Camera，Android5.0以后Google 引入了一套全新的相机框架 Camera2，相比之下，它更具灵活性，也增加了新的功能，如设置对焦模式、曝光模式、快门等。不过，很多文章里介绍，国内厂商对系统的定制导致对Camera2的支持不尽相同，但是我觉得还是值得一试的，下篇文章我也去探索一下Camera2(所以呢，本文总结的是Camera)。</p>
-<p>选择Camera还是Camera2除了跟手机硬件的关系外，还有个需求是是否要适配5.0以下。Camera2是支持5.0+的。</p>
-        
-          <a class="article-more-a" href="/2019/05/24/Camera%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Camera</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/24/Camera%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
- 
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1309,6 +1309,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">线程池</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">synchronized</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">锁</a>
               </li>
             
             <div class="clearfix"></div>
